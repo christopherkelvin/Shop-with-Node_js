@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
+const Dirpath=require('../utils/path')
 
 
 router.use(bodyParser.urlencoded({ extended: false }));
 
 router.get("/add-product", (req, res, next) => {
- res.sendFile(path.join(__dirname,'../','views','add-product.html'))
+ res.sendFile(path.join(Dirpath,'views','add-product.html'))
 });
 
 
