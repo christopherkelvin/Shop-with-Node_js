@@ -1,36 +1,21 @@
-/**Core Modules
- * http - launching a server and sending requests
- * https- launching ssl  server
- * fs- creating a file
- * path- constructing paths to files
- * os - helps with operating system specific
- */
-const http = require("http");
-// function rqListener(req, res) {
+const path = require('path');
 
-// }
-// http.createServer(rqListener);
+const express = require('express');
+const bodyParser = require('body-parser');
 
-// http.createServer(function (req, res) {
+const app = express();
 
-// })
-const server = http.createServer((req, res) => {
-  //   console.log(req);
-  const url = req.url;
-  if (url === "/") {
-    res.write("<html>");
-    res.write("<head><title>Enter Message</title></head>");
-    res.write(
-      "<body><form action='/message' method='POST'><input name='message' type='text'/> <input type='submit' value='Send'/></form></body>"
-    );
-    res.write("</html>");
-    return res.end();
-  }
-  res.setHeader("Content-Type", "text/html");
-  res.write("<html>");
-  res.write("<head><title>My first sever website</title></head>");
-  res.write("<body><h1>My first sever website</h1></body>");
-  res.write("</html>");
-  res.end();
+const adminData = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/admin', adminData.routes);
+app.use(shopRoutes);
+
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
 });
-server.listen(3000);
+
+app.listen(3000);
